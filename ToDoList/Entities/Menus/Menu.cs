@@ -30,11 +30,23 @@ namespace ToDoList.Entities.Menus
                 switch (option)
                 {
                     case 1:
-                        AddingMenu(); break;
+                        AddingMenu(); InitialMenu(); break;
                     case 2:
-                        ListingMenu(); break;
+                        { 
+                            Console.Clear(); 
+                            Console.WriteLine("-- Listing Tasks --");  
+                            if(ListingMenu() == 0)
+                            {
+                                Console.WriteLine("No tasks found to list");
+                            }
+                                Console.WriteLine("");
+                            Console.WriteLine("Press any key to return to the main menu");
+                            Console.ReadKey();
+                            InitialMenu(); 
+                            break;
+                        }
                     case 3:
-                        RemovingMenu(); break;
+                        RemovingMenu(); InitialMenu(); break;
                     case 4:
                         EditingMenu(); break;
                     case 5:
@@ -57,6 +69,8 @@ namespace ToDoList.Entities.Menus
             catch (Exception e)
             {
                 Console.WriteLine("Something went wrong, please try again");
+                Console.WriteLine(e);
+                Thread.Sleep(10000);
                 InitialMenu();
             }
 
@@ -65,7 +79,7 @@ namespace ToDoList.Entities.Menus
         internal static void AddingMenu()
         {
 
-            List<Task> tasks = searchTasks();
+            List<Task> tasks = SearchTasks();
             DateTime? deadline = null;
 
             Console.Clear();
@@ -107,18 +121,21 @@ namespace ToDoList.Entities.Menus
 
                 }
             }
-            Task task = new Task(greaterId(), description, deadline);
+            Task task = new Task(GreaterId(), description, deadline);
 
-            addTask(task);
-
-
+            AddTask(task);
+            Console.Clear();
             Console.WriteLine("Task added successfully!");
+            Thread.Sleep(3000);
         }
         internal static void EditingMenu() { }
 
-        internal static void ListingMenu() {
-            List<Task> tasks = searchTasks();
-
+        internal static int ListingMenu() {
+            List<Task> tasks = SearchTasks();
+            if(tasks.Count < 1)
+            {
+                return 0;
+            }
             foreach(var task in tasks)
             {
                 Console.WriteLine("");
@@ -129,10 +146,27 @@ namespace ToDoList.Entities.Menus
                 if(task.Deadline != null)
                     Console.Write($"Deadline: {task.Deadline}\n");
             }
+            return 1;
 
         }
 
-        internal static void RemovingMenu() { }
+        internal static void RemovingMenu() {
+            Console.Clear();
+            Console.WriteLine("-- Deleting task --");
+            if(ListingMenu() == 0)
+            {
+                Console.WriteLine("No tasks to delete");
+                Console.WriteLine("");
+                Console.WriteLine("Press any key to return to the main menu");
+                Console.ReadKey();
+                InitialMenu();
+                return;
+            }
+            Console.WriteLine("");
+            Console.WriteLine("Which task would you want to remove?");
+            int choosedTask = int.Parse(Console.ReadLine());
+            RemoveTask(choosedTask);
+        }
 
     }
 }

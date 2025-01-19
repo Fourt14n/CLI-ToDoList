@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ToDoList.Entities.Menus.Menu;
 
 namespace ToDoList.Entities.FileController
 {
@@ -11,25 +12,19 @@ namespace ToDoList.Entities.FileController
     {
         public static string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ToDoList");
         public static string filePath = Path.Combine(directoryPath, "tasks.json");
-        internal static void addTask(Task task)
+        internal static void AddTask(Task task)
         {
 
             if (!Directory.Exists(directoryPath))
                 Directory.CreateDirectory(directoryPath);
 
-            if (!File.Exists(filePath))
-                File.Create(filePath);
-
             string json = JsonConvert.SerializeObject(task);
-
-            Console.WriteLine(json);
-            Thread.Sleep(5000);
 
             File.AppendAllLines(filePath, new string[] { json });
 
 
         }
-        internal static List<Task> searchTasks()
+        internal static List<Task> SearchTasks()
         {
             List<Task> tasks = new List<Task>();
             if (File.Exists(filePath))
@@ -43,28 +38,30 @@ namespace ToDoList.Entities.FileController
             }
             return tasks;
         }
-        internal static void removeTask()
+        internal static void RemoveTask(int choosedTask)
         {
-            List<Task> tasks = searchTasks();
-            Console.Clear();
-            Console.WriteLine("-- Deleting task --");
-            Console.WriteLine("Which task would you want to remove?");
-            
-            int choosedTask = int.Parse(Console.ReadLine());
-            foreach(var task in tasks)
+            List<Task> tasks = SearchTasks();
+
+
+            for (int i = 1; i < tasks.Count; i++) 
             {
-                if(task.Id == choosedTask)
+                if (tasks[i].Id == choosedTask)
                 {
-                    tasks.Remove(task);
-                    File.Delete(filePath);
-                    addTask(task);
-                    break;
+                    tasks.Remove(tasks[i]);
+                    continue;
                 }
             }
+
+            File.Delete(filePath);
+            foreach (var task in tasks)
+            {
+                string json = JsonConvert.SerializeObject(task);
+                File.AppendAllLines(filePath, new string[] { json });
+            }
         }
-        internal static int greaterId()
+        internal static int GreaterId()
         {
-            List<Task> tasks = searchTasks();
+            List<Task> tasks = SearchTasks();
             if (tasks.Count == 0)
                 return 1;
             else
