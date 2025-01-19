@@ -1,4 +1,4 @@
-﻿using ToDoList.Entities;
+﻿using ToDoList.Entities.Menus;
 namespace ToDoList
 {
     internal class Program
@@ -6,6 +6,8 @@ namespace ToDoList
         static void Main(string[] args)
         {
             Menu.InitialMenu(); 
+
+
         }
     }
 }
