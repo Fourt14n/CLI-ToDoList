@@ -24,20 +24,6 @@ namespace ToDoList.Entities.FileController
 
 
         }
-        internal static List<Task> SearchTasks()
-        {
-            List<Task> tasks = new List<Task>();
-            if (File.Exists(filePath))
-            {
-                string[] lines = File.ReadAllLines(filePath);
-                foreach (string line in lines)
-                {
-                    Task task = JsonConvert.DeserializeObject<Task>(line);
-                    tasks.Add(task);
-                }
-            }
-            return tasks;
-        }
         internal static void RemoveTask(int choosedTask)
         {
             List<Task> tasks = SearchTasks();
@@ -58,6 +44,39 @@ namespace ToDoList.Entities.FileController
                 string json = JsonConvert.SerializeObject(task);
                 File.AppendAllLines(filePath, new string[] { json });
             }
+        }
+        internal static void EditTask(int choosedTask, Task task)
+        {
+            List<Task> tasks = SearchTasks();
+            for (int i = 1; i < tasks.Count; i++)
+            {
+                if (tasks[i].Id == choosedTask)
+                {
+                    tasks[i] = task;
+                    continue;
+                }
+            }
+            File.Delete(filePath);
+            foreach (var t in tasks)
+            {
+                string json = JsonConvert.SerializeObject(t);
+                File.AppendAllLines(filePath, new string[] { json });
+            }
+
+        }
+        internal static List<Task> SearchTasks()
+        {
+            List<Task> tasks = new List<Task>();
+            if (File.Exists(filePath))
+            {
+                string[] lines = File.ReadAllLines(filePath);
+                foreach (string line in lines)
+                {
+                    Task task = JsonConvert.DeserializeObject<Task>(line);
+                    tasks.Add(task);
+                }
+            }
+            return tasks;
         }
         internal static int GreaterId()
         {

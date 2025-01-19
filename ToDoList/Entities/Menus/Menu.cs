@@ -48,7 +48,7 @@ namespace ToDoList.Entities.Menus
                     case 3:
                         RemovingMenu(); InitialMenu(); break;
                     case 4:
-                        EditingMenu(); break;
+                        EditingMenu(); InitialMenu(); break;
                     case 5:
                         Console.Clear(); Console.WriteLine("Exiting..."); Thread.Sleep(2000); break;
                     default:
@@ -128,7 +128,70 @@ namespace ToDoList.Entities.Menus
             Console.WriteLine("Task added successfully!");
             Thread.Sleep(3000);
         }
-        internal static void EditingMenu() { }
+        internal static void EditingMenu() {
+            DateTime? deadline = null;
+
+            Console.Clear();
+            Console.WriteLine("-- Editing task --");
+            if(ListingMenu() == 0)
+            {
+                Console.WriteLine("No tasks to edit");
+                Console.WriteLine("");
+                Console.WriteLine("Press any key to return to the main menu");
+                Console.ReadKey();
+                InitialMenu();
+                return;
+            }
+            Console.WriteLine("");
+            Console.WriteLine("Which task would you want to edit?");
+            int choosedTask = int.Parse(Console.ReadLine());
+
+            Console.Clear();
+
+            Console.Write("Task description:");
+            string description = Console.ReadLine();
+            for (int i = 0; i != 1;)
+            {
+                Console.WriteLine("Do you want to set a deadline? (Y/N)");
+                string answer = Console.ReadLine().ToUpper();
+                if (answer == "Y")
+                {
+                    for (int a = 0; a != 1;)
+                    {
+                        try
+                        {
+
+                            Console.Write("Task deadline: (DD/MM/YYYY)");
+                            deadline = DateTime.Parse(Console.ReadLine());
+                            a++;
+                            i++;
+
+                        }
+                        catch (FormatException e)
+                        {
+                            Console.WriteLine("Invalid date format, try again");
+                        }
+                    }
+                }
+                else if (answer == "N")
+                {
+
+                    i++;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid option, try again");
+
+                }
+            }
+            Task task = new Task(choosedTask, description, deadline);
+            EditTask(choosedTask, task);
+
+            Console.Clear();
+            Console.WriteLine("Task edited successfully!");
+            Thread.Sleep(3000);
+
+        }
 
         internal static int ListingMenu() {
             List<Task> tasks = SearchTasks();
