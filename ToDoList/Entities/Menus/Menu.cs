@@ -31,11 +31,12 @@ namespace ToDoList.Entities.Menus
                 {
                     case 1:
                         AddingMenu(); InitialMenu(); break;
+                    // Displays the menu of listing
                     case 2:
                         { 
                             Console.Clear(); 
                             Console.WriteLine("-- Listing Tasks --");  
-                            if(ListingMenu() == 0)
+                            if(DisplayingTasks() == 0)
                             {
                                 Console.WriteLine("No tasks found to list");
                             }
@@ -133,7 +134,7 @@ namespace ToDoList.Entities.Menus
 
             Console.Clear();
             Console.WriteLine("-- Editing task --");
-            if(ListingMenu() == 0)
+            if(DisplayingTasks() == 0)
             {
                 Console.WriteLine("No tasks to edit");
                 Console.WriteLine("");
@@ -192,8 +193,11 @@ namespace ToDoList.Entities.Menus
             Thread.Sleep(3000);
 
         }
-
-        internal static int ListingMenu() {
+        /// <summary>
+        /// Method to displays all tasks
+        /// </summary>
+        /// <returns></returns>
+        internal static int DisplayingTasks() {
             List<Task> tasks = SearchTasks();
             if(tasks.Count < 1)
             {
@@ -216,7 +220,7 @@ namespace ToDoList.Entities.Menus
         internal static void RemovingMenu() {
             Console.Clear();
             Console.WriteLine("-- Deleting task --");
-            if(ListingMenu() == 0)
+            if(DisplayingTasks() == 0)
             {
                 Console.WriteLine("No tasks to delete");
                 Console.WriteLine("");

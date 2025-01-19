@@ -6,8 +6,6 @@ namespace ToDoList
         static void Main(string[] args)
         {
             Menu.InitialMenu(); 
-
-
         }
     }
 }

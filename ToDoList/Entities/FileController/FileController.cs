@@ -8,18 +8,22 @@ using static ToDoList.Entities.Menus.Menu;
 
 namespace ToDoList.Entities.FileController
 {
+    /// <summary>
+    /// Class responsible for controlling the file stream
+    /// </summary>
     internal static class FileController
     {
+        // Static variables to store the path of the directory and the file
         public static string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ToDoList");
         public static string filePath = Path.Combine(directoryPath, "tasks.json");
         internal static void AddTask(Task task)
         {
-
+            // Checking if the directory exists
             if (!Directory.Exists(directoryPath))
                 Directory.CreateDirectory(directoryPath);
 
             string json = JsonConvert.SerializeObject(task);
-
+            // If the file does not exist, it is created
             File.AppendAllLines(filePath, new string[] { json });
 
 
@@ -27,7 +31,7 @@ namespace ToDoList.Entities.FileController
         internal static void RemoveTask(int choosedTask)
         {
             List<Task> tasks = SearchTasks();
-
+            // Checking if the task exists
             if (choosedTask > tasks.Count || choosedTask < tasks.Count)
             {
                 Console.Clear();
@@ -79,6 +83,10 @@ namespace ToDoList.Entities.FileController
             }
 
         }
+        /// <summary>
+        /// Method to search for tasks in the file
+        /// </summary>
+        /// <returns></returns>
         internal static List<Task> SearchTasks()
         {
             List<Task> tasks = new List<Task>();
@@ -93,6 +101,7 @@ namespace ToDoList.Entities.FileController
             }
             return tasks;
         }
+        // Util to return the next id
         internal static int GreaterId()
         {
             List<Task> tasks = SearchTasks();
