@@ -28,6 +28,13 @@ namespace ToDoList.Entities.FileController
         {
             List<Task> tasks = SearchTasks();
 
+            if (choosedTask > tasks.Count || choosedTask < tasks.Count)
+            {
+                Console.Clear();
+                Console.WriteLine("Task not found");
+                Thread.Sleep(3000);
+                RemovingMenu();
+            }
 
             for (int i = 1; i < tasks.Count; i++) 
             {
@@ -47,7 +54,15 @@ namespace ToDoList.Entities.FileController
         }
         internal static void EditTask(int choosedTask, Task task)
         {
+
             List<Task> tasks = SearchTasks();
+            if(choosedTask > tasks.Count || choosedTask < tasks.Count)
+            {
+                Console.Clear();
+                Console.WriteLine("Task not found");
+                Thread.Sleep(3000);
+                EditingMenu();
+            }
             for (int i = 1; i < tasks.Count; i++)
             {
                 if (tasks[i].Id == choosedTask)
